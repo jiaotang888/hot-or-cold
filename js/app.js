@@ -1,4 +1,5 @@
-var x = createNum();
+var randomNum = createNum();
+
 new Vue({
 	el:"#container",
 	data:{
@@ -10,29 +11,53 @@ new Vue({
 	},
 	methods:{
 		guess:function(){
-			this.feed = getFeed(x,this.guessNum);
+			var guessNum = parseInt(this.guessNum);
+			var counter = this.counter;
+			var lastNum = this.guessList[counter-1];
+			this.feed =	getFeed (randomNum,guessNum,counter,lastNum);
 			this.counter++;
-			this.guessList.push(this.guessNum);
-			this.guessNum = '';			
+			this.guessList.push(guessNum);
+			this.guessNum = '';		
 		},
 		newGame:function(){
-			x = createNum();
+			randomNum = createNum();
 			this.feed = "Make your Guess!",
 			this.counter = 0;
 			this.guessList = [];
 		}
 	}
 });
+
 function createNum () {
 	return Math.floor(Math.random()*100+1)
 }
-function getFeed (randomNum,guessNum) {
-	var d = Math.abs(randomNum - parseInt(guessNum));
-	if (d ==0 ) {
+
+function getFeed (randomNum,guessNum,counter,lastNum) {
+	var d = Math.abs(guessNum - randomNum);
+	if (d == 0) {
 		return "Congratulations!"
-	} else if (d < 11) {
-		return "hot"
 	} else{
-		return "cold"
+		var a = (function(){
+			if (d<10) {
+				return "Hot"
+			} else{
+				return "Cold"
+			};
+		})();
+		var b = (function(){
+			if (counter) {
+				var lastd = Math.abs(lastNum - randomNum);
+				if (d<lastd) {
+					return "  Warmmer"
+				} else if (d>lastd) {
+					return "  Colder"
+				} else{
+					return ""
+				};
+			} else{
+				return ""
+			};
+		})();
+		return a + b;
 	};
 }
