@@ -55,7 +55,7 @@
       		<p>Guess #<span id="count">{{counter}}</span>!</p>
 			
 			<ul id="guessList" class="guessBox clearfix">
-			<li v-for="item in guessList">{{item}}</li>
+			<li v-for="item in guessList" track-by="$index">{{item}}</li>
 
 			</ul>
 
